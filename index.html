@@ -186,6 +186,14 @@ a:focus-visible,button:focus-visible{outline-color:#93c5fd}
 }
 
 
+/* Header shortcuts and product favorites */
+.header-shortcut{display:inline-flex;align-items:center;gap:5px;padding:9px 12px;border:1px solid #355174;border-radius:10px;background:#142b4b;color:#b9d5ff;font-weight:800;white-space:nowrap;font-size:.88rem}
+.header-shortcut:hover{background:#1b3b66}
+.product-wrap{position:relative;min-width:0}
+.favorite-toggle{position:absolute;right:9px;top:9px;z-index:2;width:34px;height:34px;border:1px solid #45658d;border-radius:50%;background:#0b1423;color:#ff8aa7;font-size:1.35rem;line-height:1;cursor:pointer;box-shadow:0 3px 10px #0005}
+.favorite-toggle.saved{background:#3a1830;border-color:#b34e82;color:#ff6b9c}
+.product-wrap .listing{height:100%}
+@media(max-width:640px){.header-shortcut{flex:1;justify-content:center;padding:7px 5px;font-size:.72rem}.cta{flex-wrap:wrap}.cta .acct{flex:1 1 100%}}
 /* Homepage trust message and category presentation */
 .trust-strip{display:flex;align-items:center;gap:12px;margin:14px 0 18px;padding:13px 16px;border:1px solid #31517b;border-radius:12px;background:linear-gradient(110deg,#10213a,#142c4e);color:#f3f7ff}
 .trust-mark{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:50%;background:#1d4ed8;color:#fff;font-size:1.1rem;font-weight:800}
@@ -198,7 +206,7 @@ a:focus-visible,button:focus-visible{outline-color:#93c5fd}
 <body>
 <div class="top">
 <a class="logo" href="#home"><span class="gem" aria-hidden="true"></span><span>ALMAS<small>ONLINE SERVICE</small></span></a>
-<div class="cta"><button class="acct" id="acct" type="button">Log in / Sign up</button><a class="wa" href="https://wa.me/93783215592?text=Hello%20ALMAS" target="_blank" rel="noopener">WhatsApp</a><a class="tg" href="https://t.me/ALMASONLINESERVICE" target="_blank" rel="noopener">Telegram</a></div>
+<div class="cta"><a class="header-shortcut" href="#favorites">♡ <span>Favorites</span> (<span id="favorite-count">0</span>)</a><a class="header-shortcut" href="#cart">🛒 <span>Cart</span> (<span id="cart-count-top">0</span>)</a><button class="acct" id="acct" type="button">Log in / Sign up</button><a class="wa" href="https://wa.me/93783215592?text=Hello%20ALMAS" target="_blank" rel="noopener">WhatsApp</a><a class="tg" href="https://t.me/ALMASONLINESERVICE" target="_blank" rel="noopener">Telegram</a></div>
 </div>
 <nav class="nav" aria-label="Pages">
 <a href="#home" data-v="home">Home</a><a href="#tiktok" data-v="tiktok">TikTok</a><a href="#facebook" data-v="facebook">Facebook</a><a href="#youtube" data-v="youtube">YouTube</a><a href="#instagram" data-v="instagram">Instagram</a><a href="#premium" data-v="premium">Premium Accounts</a><a href="#services" data-v="services">Other Services</a><a href="#contact" data-v="contact">Contact Us</a><a href="#cart" data-v="cart">Cart (<span id="cart-count">0</span>)</a>
@@ -234,6 +242,7 @@ a:focus-visible,button:focus-visible{outline-color:#93c5fd}
 <h2>How to order</h2>
 <div class="steps"><div>Message us with the account you want.</div><div>We confirm it is available and tell you the price.</div><div>You pay and we send the account details.</div><div>Check the account right away and tell us if anything is wrong.</div></div>
 </section>
+<section class="view" id="v-favorites" hidden><h2>Your Favorites</h2><p class="sub">Products you have saved for later.</p><div class="grid" id="favorite-items"></div></section>
 <section class="view" id="v-cart" hidden><h2>Your Cart</h2><p class="sub">Review your items and continue to secure checkout.</p><div id="cart-items"></div><div id="cart-checkout" class="box note" style="margin-top:16px"></div></section>
 <section class="view" id="v-product" hidden></section>
 </main>
@@ -277,8 +286,9 @@ if(p.pic)return '<div class="thumb pic'+(big?' big':'')+'"><img src="'+LG[p.pic]
 return '<div class="thumb'+(big?' big':'')+' '+p.k+'">'+p.l+'</div>';
 }
 function card(p){
-if(p.f)return '<a class="box listing'+(p.img?' withimg':(p.pic?' withlogo':''))+'" href="#p-'+p.id+'">'+(p.img?'<img src="'+IMG+'" alt="Screenshot of the account with its name and username hidden">':(p.pic?'<img class="lgo" src="'+LG[p.pic]+'" alt="'+p.l+' logo">':''))+'<div><span class="tag">Featured account</span><h3>'+p.t+'</h3><ul>'+p.f.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></div><div class="buy"><b class="big">'+p.price+'</b><span class="btn">View details</span></div></a>';
-return '<a class="box p" href="#p-'+p.id+'">'+thumb(p)+'<h3>'+p.t+'</h3>'+pr(p)+'<small>'+p.d+'</small><span class="btn">View details</span></a>';
+var fav=isFavorite(p.id),heart=fav?"♥":"♡";
+if(p.f)return '<div class="product-wrap"><a class="box listing'+(p.img?' withimg':(p.pic?' withlogo':''))+'" href="#p-'+p.id+'">'+(p.img?'<img src="'+IMG+'" alt="Screenshot of the account with its name and username hidden">':(p.pic?'<img class="lgo" src="'+LG[p.pic]+'" alt="'+p.l+' logo">':''))+'<div><span class="tag">Featured account</span><h3>'+p.t+'</h3><ul>'+p.f.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></div><div class="buy"><b class="big">'+p.price+'</b><span class="btn">View details</span></div></a><button class="favorite-toggle'+(fav?' saved':'')+'" type="button" data-favorite="'+p.id+'" aria-label="'+(fav?'Remove from favorites':'Add to favorites')+'">'+heart+'</button></div>';
+return '<div class="product-wrap"><a class="box p" href="#p-'+p.id+'">'+thumb(p)+'<h3>'+p.t+'</h3>'+pr(p)+'<small>'+p.d+'</small><span class="btn">View details</span></a><button class="favorite-toggle'+(fav?' saved':'')+'" type="button" data-favorite="'+p.id+'" aria-label="'+(fav?'Remove from favorites':'Add to favorites')+'">'+heart+'</button></div>';
 }
 function detail(p){
 var c=C[p.v];
@@ -287,11 +297,17 @@ var ft=p.f?'<ul class="ft">'+p.f.map(function(x){return '<li>'+x+'</li>'}).join(
 return '<div class="crumb"><a href="#home">Home</a> › <a href="#'+p.v+'">'+c+'</a> › '+p.t+'</div><div class="pd"><div>'+pic+'<div class="mini"><span>Instant delivery</span><span>Secure payment</span><span>Genuine product</span><span>24/7 support</span></div></div><div><span class="tag">'+c+'</span><h1>'+p.t+'</h1><p class="lead">'+p.d+'</p>'+pr(p,1)+ft+'<div class="actions"><button class="btn cart-add" type="button" data-add="'+p.id+'">Add to Cart</button><a class="btn alt" href="'+W+encodeURIComponent(p.m)+'" target="_blank" rel="noopener">Ask on WhatsApp</a></div><div class="box note"><b>How it works</b><p>Message us and we confirm it is available and tell you the price. You pay and we send the details. Check everything right away and tell us if anything is wrong.</p></div></div></div>';
 }
 
-var CART_KEY='almas_cart_v1';
+var CART_KEY='almas_cart_v1',FAV_KEY='almas_favorites_v1';
+function getFavorites(){try{return JSON.parse(localStorage.getItem(FAV_KEY)||'[]')}catch(e){return []}}
+function isFavorite(id){return getFavorites().indexOf(id)!==-1}
+function saveFavorites(a){localStorage.setItem(FAV_KEY,JSON.stringify(a));updateFavoriteCount();renderFavorites()}
+function toggleFavorite(id){var a=getFavorites();a=a.indexOf(id)!==-1?a.filter(function(x){return x!==id}):a.concat(id);saveFavorites(a);document.querySelectorAll('[data-favorite="'+id+'"]').forEach(function(b){var yes=a.indexOf(id)!==-1;b.textContent=yes?'♥':'♡';b.classList.toggle('saved',yes);b.setAttribute('aria-label',yes?'Remove from favorites':'Add to favorites')})}
+function updateFavoriteCount(){var el=document.getElementById('favorite-count');if(el)el.textContent=getFavorites().length}
+function renderFavorites(){var root=document.getElementById('favorite-items');if(!root)return;var a=getFavorites(),items=P.filter(function(p){return a.indexOf(p.id)!==-1});root.innerHTML=items.length?items.map(card).join(''):'<div class="box note"><b>No favorites yet.</b><p>Tap the heart on a product to save it here.</p><a class="btn" href="#home">Browse products</a></div>'}
 function getCart(){try{return JSON.parse(localStorage.getItem(CART_KEY)||'[]')}catch(e){return []}}
 function saveCart(c){localStorage.setItem(CART_KEY,JSON.stringify(c));updateCartCount();renderCart()}
 function priceNumber(p){return p.price?Number(String(p.price).replace(/[^0-9.]/g,''))||0:0}
-function updateCartCount(){var n=getCart().reduce(function(a,x){return a+x.qty},0),el=document.getElementById('cart-count');if(el)el.textContent=n}
+function updateCartCount(){var n=getCart().reduce(function(a,x){return a+x.qty},0);['cart-count','cart-count-top'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=n})}
 function addCart(id){var p=P.filter(function(x){return x.id===id})[0];if(!p)return;var c=getCart(),item=c.filter(function(x){return x.id===id})[0];if(item)item.qty++;else c.push({id:p.id,qty:1});saveCart(c);alert(p.t+' added to your cart.')}
 function renderCart(){
 var root=document.getElementById('cart-items'),checkout=document.getElementById('cart-checkout');if(!root||!checkout)return;
@@ -300,9 +316,9 @@ if(!c.length){root.innerHTML='<div class="box note"><b>Your cart is empty.</b><p
 root.innerHTML=c.map(function(x){var p=P.filter(function(z){return z.id===x.id})[0];if(!p)return '';var n=priceNumber(p);total+=n*x.qty;if(!n)unknown=true;return '<div class="box listing" style="margin:10px 0"><div><span class="tag">'+p.l+'</span><h3>'+p.t+'</h3><p class="sub">'+(p.price||'Price confirmed by shop')+' · Quantity: '+x.qty+'</p></div><div style="text-align:right"><b>'+(p.price||'Price on request')+'</b><br><button class="cart-remove" type="button" data-remove="'+p.id+'">Remove</button></div></div>'}).join('');
 checkout.innerHTML='<h3>Checkout</h3><p>Order total: <b>'+total.toLocaleString()+' AFG</b>'+(unknown?' (some prices need shop confirmation)':'')+'</p><form id="checkout-form"><div class="checkout-grid"><label>Full name<input name="customer" required maxlength="80" autocomplete="name"></label><label>Email<input name="email" type="email" required autocomplete="email"></label><label>Phone / WhatsApp<input name="phone" required maxlength="30" autocomplete="tel"></label><label>Delivery details<input name="delivery" required maxlength="180" placeholder="Country / account delivery details"></label></div><h3 style="margin-top:18px">Choose payment method</h3><div class="payment-options"><label><input type="radio" name="payment" value="Bank Transfer" required> Bank Transfer</label><label><input type="radio" name="payment" value="Crypto (USDT / BTC)"> Crypto (USDT / BTC)</label><label><input type="radio" name="payment" value="Azipay"> Azipay</label><label><input type="radio" name="payment" value="PayPal"> PayPal</label></div><p class="sub">After you submit, we will send your order to ALMAS ONLINE SERVICE on WhatsApp. Ask us for verified payment details before sending money. Payment is not processed automatically on this website.</p><button class="btn" type="submit">Submit order on WhatsApp</button></form>';
 }
-document.addEventListener('click',function(e){var a=e.target.closest('[data-add]');if(a){addCart(a.getAttribute('data-add'));return;}var r=e.target.closest('[data-remove]');if(r){saveCart(getCart().filter(function(x){return x.id!==r.getAttribute('data-remove')}));}});
+document.addEventListener('click',function(e){var f=e.target.closest('[data-favorite]');if(f){e.preventDefault();e.stopPropagation();toggleFavorite(f.getAttribute('data-favorite'));return;}var a=e.target.closest('[data-add]');if(a){addCart(a.getAttribute('data-add'));return;}var r=e.target.closest('[data-remove]');if(r){saveCart(getCart().filter(function(x){return x.id!==r.getAttribute('data-remove')}));}});
 document.addEventListener('submit',function(e){if(e.target.id!=='checkout-form')return;e.preventDefault();var fd=new FormData(e.target),c=getCart(),lines=c.map(function(x){var p=P.filter(function(z){return z.id===x.id})[0];return p?p.t+' x'+x.qty+' — '+(p.price||'price to confirm'):''}).filter(Boolean);var msg=['ALMAS ONLINE SERVICE — NEW ORDER','Name: '+fd.get('customer'),'Email: '+fd.get('email'),'Phone: '+fd.get('phone'),'Delivery: '+fd.get('delivery'),'Payment method: '+fd.get('payment'),'Items:',lines.join('\n'),'Please confirm total and payment instructions.'].join('\n');window.open(W+encodeURIComponent(msg),'_blank','noopener');});
-updateCartCount();renderCart();
+updateCartCount();updateFavoriteCount();renderCart();renderFavorites();
 
 P.forEach(function(p){
 var el=document.getElementById((p.f?'l-':'g-')+p.v);
@@ -312,7 +328,7 @@ if(el)el.insertAdjacentHTML('beforeend',card(p));
 document.querySelectorAll('.tile').forEach(function(a){var k=a.getAttribute('href').slice(1),i=a.querySelector('i');if(LG[k]&&i){i.className='lg';i.innerHTML='<img src="'+LG[k]+'" alt="">';}});
 var views=document.querySelectorAll('.view'),tabs=document.querySelectorAll('.nav a'),prod=document.getElementById('v-product');
 function route(){
-var h=(location.hash||'#home').slice(1),v=h,p=null;if(h==='cart')renderCart();
+var h=(location.hash||'#home').slice(1),v=h,p=null;if(h==='cart')renderCart();if(h==='favorites')renderFavorites();
 if(h.indexOf('p-')===0){p=P.filter(function(x){return 'p-'+x.id===h})[0];v=p?'product':'home';}
 else if(!document.getElementById('v-'+h))v='home';
 if(p)prod.innerHTML=detail(p);
