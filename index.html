@@ -108,6 +108,83 @@ footer{color:#91a4c1}
 a:focus-visible,button:focus-visible{outline-color:#93c5fd}
 ::selection{background:#2563eb;color:#fff}
 @media(max-width:640px){.top{background:#0b1220}.cta .acct{background:#142b4b}}
+
+/* Compact responsive layout for phones */
+@media (max-width: 640px) {
+  body { font-size: 14px; line-height: 1.45; }
+  .top { padding: 9px 12px; gap: 8px; }
+  .logo { font-size: 1.05rem; gap: 7px; }
+  .gem { width: 27px; height: 27px; }
+  .logo small { font-size: .54rem; }
+  .cta { gap: 6px; }
+  .wa, .tg, .cta .acct { padding: 8px 9px; font-size: .78rem; border-radius: 8px; }
+  .nav { padding: 0 5px; }
+  .nav a { padding: 10px 10px; font-size: .78rem; }
+  .page { margin: 12px auto; padding: 0 10px; }
+  .hero { padding: 22px 16px; border-radius: 13px; }
+  .hero h1 { font-size: clamp(1.55rem, 7vw, 2rem); max-width: 12em; }
+  .hero p { font-size: .86rem; max-width: 24em; margin-bottom: 15px; }
+  .pill { font-size: .67rem; padding: 4px 8px; margin-bottom: 10px; }
+  .hero .btn, .btn { padding: 9px 13px; font-size: .82rem; border-radius: 8px; }
+  .d1 { width: 78px; height: 78px; right: 4%; top: 18%; opacity: .25; }
+  .feat { margin: 12px 0; grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .feat div { padding: 10px; border-bottom: 1px solid var(--line); }
+  .feat b { font-size: .82rem; }
+  .feat span { font-size: .72rem; }
+  h2 { font-size: 1.12rem; margin: 18px 0 3px; }
+  .sub { font-size: .8rem; margin-bottom: 11px; }
+  .grid { gap: 9px; grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .p { padding: 9px; border-radius: 11px; }
+  .thumb { height: 82px; font-size: 1.1rem; margin-bottom: 8px; border-radius: 9px; }
+  .thumb.pic img { height: 66px; }
+  .p h3 { font-size: .82rem; line-height: 1.3; }
+  .p small { font-size: .7rem; margin: 3px 0 8px; }
+  .price { font-size: .92rem; }
+  .pr { gap: 5px; }
+  .p .btn { width: 100%; padding: 8px 5px; font-size: .74rem; }
+  .tiles { gap: 8px; grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .tile { padding: 11px 5px; font-size: .75rem; border-radius: 10px; }
+  .tile i { width: 35px; height: 35px; margin-bottom: 5px; }
+  .tile i.lg { width: 38px; height: 38px; }
+  .tile i.lg img { width: 30px; height: 30px; }
+  .listing { padding: 12px; gap: 10px; border-radius: 11px; }
+  .listing h3 { font-size: 1rem; }
+  .listing ul { grid-template-columns: 1fr; font-size: .78rem; }
+  .listing.withlogo .lgo { max-width: 62px; }
+  .listing img { max-width: 100%; }
+  .buy .big { font-size: 1.2rem; }
+  .pd { gap: 14px; }
+  .thumb.big { height: 160px; }
+  .thumb.pic.big img { height: 125px; }
+  .pd h1 { font-size: 1.35rem; }
+  .pr.big .price { font-size: 1.5rem; }
+  .mini { gap: 6px; margin-top: 8px; }
+  .mini span { padding: 8px 5px; font-size: .72rem; }
+  .actions { gap: 7px; margin: 12px 0; }
+  .actions .btn { flex: 1 1 100%; }
+  .note, .contact .box { padding: 13px; }
+  .steps { gap: 8px; grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .steps div { padding: 11px; font-size: .76rem; }
+  .contact { gap: 9px; grid-template-columns: 1fr; }
+  .dark { padding: 15px; gap: 9px; margin-top: 16px; border-radius: 12px; }
+  .dark h3 { font-size: .95rem; }
+  .dark p { font-size: .78rem; }
+  footer { padding: 18px 10px 24px; font-size: .76rem; }
+  dialog { padding: 17px; width: min(94vw, 360px); }
+  dialog label, dialog p { font-size: .82rem; }
+  dialog input { padding: 9px 10px; }
+  .checkout-grid { grid-template-columns: 1fr; gap: 9px; }
+  .checkout-grid label { font-size: .8rem; }
+  .checkout-grid input, .checkout-grid select { padding: 9px; font-size: .85rem; }
+  .payment-options label { padding: 8px; font-size: .8rem; }
+}
+@media (max-width: 360px) {
+  .grid { gap: 7px; }
+  .p { padding: 7px; }
+  .nav a { padding: 9px 8px; font-size: .73rem; }
+  .cta .wa, .cta .tg, .cta .acct { font-size: .7rem; padding: 7px 6px; }
+}
+
 </style>
 </head>
 <body>
